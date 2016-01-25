@@ -24,6 +24,12 @@ def create_test_list
     })
 end
 
+def create_second_list
+  List.create({
+    :name => 'list2'
+    })
+end
+
 def create_test_task(list_id)
   Task.create({
     :description => 'task',

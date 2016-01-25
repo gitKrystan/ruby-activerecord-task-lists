@@ -17,3 +17,24 @@ post('/lists') do
     })
   redirect('/')
 end
+
+post('/tasks') do
+  list = List.find(params[:list_id])
+  list.tasks.create({
+    :description => params[:description]
+    })
+  redirect('/')
+end
+
+patch('/tasks') do
+  task = Task.find(params[:task_id])
+  done_button_action = params[:done]
+  if done_button_action == "clicked"
+    task.update(done: 't')
+  elsif done_button_action.nil?
+    list_id = params[:list_id]
+    task.update(list_id: list_id)
+  end
+
+  redirect('/')
+end
