@@ -1,0 +1,29 @@
+<div class="row row-horizon">
+  <% if @lists.any? %>
+    <% @lists.each() do |list| %>
+    <div class="col-xs-3 well">
+      <h4><%= list.name() %></h4>
+      <form action="/tasks" method="post">
+        <div class="form-group" >
+          <textarea class="form-control" rows="3" name="description" placeholder="Add a task..."></textarea>
+        </div>
+        <div class="form-group" >
+          <button type="submit" class="btn btn-success">Save</button>
+        </div>
+      </form>
+    </div>
+    <% end %>
+  <% end %>
+
+  <!-- Show new list form -->
+  <div class="col-xs-3 well">
+    <form action="/lists" method="post">
+      <div class="form-group" >
+        <input type="text" class="form-control" name="name" placeholder="Add a list...">
+      </div>
+      <div class="form-group" >
+        <button type="submit" class="btn btn-success">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
