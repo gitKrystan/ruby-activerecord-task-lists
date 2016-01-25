@@ -52,3 +52,13 @@ describe('moving a task', {:type => :feature}) do
     expect(second_list.tasks()).to(eq([test_task]))
   end
 end
+
+describe('completing a task', {:type => :feature}) do
+  it('allows the user to hide completed tasks') do
+    test_list = create_test_list()
+    test_task = create_test_task(test_list.id())
+    visit('/')
+    click_button('Done')
+    expect(page).not_to(have_content('task'))
+  end
+end
