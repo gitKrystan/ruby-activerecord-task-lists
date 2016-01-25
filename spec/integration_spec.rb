@@ -17,10 +17,13 @@ RSpec.configure do |config|
 end
 
 describe('adding a list', {:type => :feature}) do
-  it('allows the user to add a list to an empty board') do
+  it('allows the user to add multiple lists to a board') do
     visit('/')
     fill_in('name', :with => 'Test List')
-    click_button('Save')
+    click_button('save-new-list')
     expect(page).to(have_content('Test List'))
+    fill_in('name', :with => 'Test List 2')
+    click_button('save-new-list')
+    expect(page).to(have_content('Test List 2'))
   end
 end
