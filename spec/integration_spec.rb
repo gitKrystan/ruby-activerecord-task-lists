@@ -47,8 +47,8 @@ describe('moving a task', {:type => :feature}) do
     second_list = create_second_list()
     test_task = create_test_task(test_list.id())
     visit('/')
-    select(second_list.name())
-    click_button('Go')
+    click_link("addATask-#{test_list.id()}")
+    click_button("Move to #{second_list.name()}")
     expect(second_list.tasks()).to(eq([test_task]))
   end
 end

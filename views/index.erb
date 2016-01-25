@@ -1,59 +1,75 @@
 <div class="row row-horizon">
   <!-- Create a well for each List -->
   <% if @lists.any? %>
-    <% @lists.each() do |list| %>
-    <div class="col-xs-3 well">
-      <h4><%= list.name() %></h4>
+    <% @lists.each() do |current_list| %>
+      <div class="col-xs-3 well">
+        <h4><%= current_list.name() %></h4>
 
-      <!-- List each task with form to move or mark complete -->
-      <% if @done_task_visibility == "show" %>
-        <% list_tasks = list.tasks() %>
-      <% else %>
-        <% list_tasks = list.tasks.where(done: false) %>
-      <% end %>
+        <!-- List each task with form to move or mark complete -->
+        <% if @done_task_visibility == "show" %>
+          <% list_tasks = current_list.tasks() %>
+        <% else %>
+          <% list_tasks = current_list.tasks.where(done: false) %>
+        <% end %>
 
-      <% list_tasks.each() do |task| %>
-        <div class="panel">
-          <div class="panel-body">
-            <form action="/tasks" method="post">
-              <input hidden name="task_id" value="<%= task.id() %>">
-              <input hidden name="_method" value="patch">
+        <% list_tasks.each() do |task| %>
+          <div class="panel">
+            <div class="panel-body">
+              <p class="pull-left"><%= task.description() %></p>
+              <form action="/tasks" method="post">
+                <input hidden name="task_id" value="<%= task.id() %>">
+                <input hidden name="_method" value="patch">
 
-              <div class="form-inline">
-                <label for="done"><%= task.description() %></label>
-                <% if task.done() %>
-                  <button id="finish-<%= task.id() %>" type="submit" class="btn btn-danger btn-xs pull-right" name="done" value="not_done">Mark as Not Done</button>
-                <% else %>
-                  <button id="finish-<%= task.id() %>" type="submit" class="btn btn-danger btn-xs pull-right" name="done" value="done">Mark as Done</button>
-                <% end %>
-              </div>
+                <!-- Button dropdown -->
+                <div class="btn-group pull-right">
+                  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                  </button>
 
-              <div class="input-group">
-                <select class="form-control" name="list_id">
-                  <option>Move to...</option>
-                  <% @lists.each() do |list| %>
-                    <option value="<%= list.id() %>"><%= list.name() %></option>
-                  <% end %>
-                </select>
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="submit" name="move" value="clicked">Go</button>
-                </span>
-              </div>
-            </form>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <% if task.done() %>
+                        <button id="finish-<%= task.id() %>" type="submit" class="btn btn-link" name="done" value="not_done">Mark as Not Done</button>
+                      <% else %>
+                        <button id="finish-<%= task.id() %>" type="submit" class="btn btn-link" name="done" value="done">Mark as Done</button>
+                      <% end %>
+                    </li>
+
+                    <li role="separator" class="divider"></li>
+
+                    <% if @lists.length() > 1 %>
+                      <% @lists.each() do |list| %>
+                        <% unless list == current_list %>
+                        <li>
+                          <button class="btn btn-link" name="list_id" value="<%= list.id() %>">
+                            Move to <%= list.name() %>
+                          </button>
+                        </li>
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                  </ul>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      <% end %>
+        <% end %>
 
-      <!-- Form for new tasks -->
-      <form action="/tasks" method="post">
-        <div class="form-group" >
-          <textarea id="task-description-for-<%= list.id() %>" class="form-control" rows="3" name="description" placeholder="Add a task..."></textarea>
+        <!-- Form for new tasks -->
+        <a role="button" id="addATask-<%= current_list.id() %>" data-toggle="collapse" href="#collapseTaskAddition-<%= current_list.id() %>" aria-expanded="false" aria-controls="collapseTaskAddition-<%= current_list.id() %>">
+          Add a task...
+        </a>
+        <div class="collapse" id="collapseTaskAddition-<%= current_list.id() %>">
+          <form action="/tasks" method="post">
+            <div class="form-group" >
+              <textarea id="task-description-for-<%= current_list.id() %>" class="form-control" rows="3" name="description" placeholder="Add a task..."></textarea>
+            </div>
+            <div class="form-group" >
+              <button id="save-task-to-<%= current_list.id() %>" type="submit" class="btn btn-success" name="list_id" value="<%= current_list.id() %>">Save</button>
+            </div>
+          </form>
         </div>
-        <div class="form-group" >
-          <button id="save-task-to-<%= list.id() %>" type="submit" class="btn btn-success" name="list_id" value="<%= list.id() %>">Save</button>
-        </div>
-      </form>
-    </div>
+      </div>
     <% end %>
   <% end %>
 
