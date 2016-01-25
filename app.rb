@@ -8,6 +8,8 @@ require "pry"
 
 get('/') do
   @lists = List.all()
+  @done_task_visibility = params[:done_task]
+
   erb(:index)
 end
 
@@ -28,10 +30,12 @@ end
 
 patch('/tasks') do
   task = Task.find(params[:task_id])
-  done_button_action = params[:done]
-  if done_button_action == "clicked"
+  done = params[:done]
+  if done == "done"
     task.update(done: 't')
-  elsif done_button_action.nil?
+  elsif done == "not_done"
+    task.update(done: 'f')
+  else
     list_id = params[:list_id]
     task.update(list_id: list_id)
   end

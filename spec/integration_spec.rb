@@ -58,7 +58,18 @@ describe('completing a task', {:type => :feature}) do
     test_list = create_test_list()
     test_task = create_test_task(test_list.id())
     visit('/')
-    click_button('Done')
-    expect(page).not_to(have_content('task'))
+    click_button('Mark as Done')
+    expect(page).not_to(have_content('test task'))
+    expect(page).to(have_content('Show completed tasks'))
+  end
+
+  it('allows the user to show completed tasks') do
+    test_list = create_test_list()
+    test_task = create_test_task(test_list.id())
+    visit('/')
+    click_button('Mark as Done')
+    click_button('Show completed tasks')
+    expect(page).to(have_content('test task'))
+    expect(page).to(have_content('Hide completed tasks'))
   end
 end

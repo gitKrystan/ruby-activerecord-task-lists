@@ -32,7 +32,7 @@ end
 
 def create_test_task(list_id)
   Task.create({
-    :description => 'task',
+    :description => 'test task',
     :list_id => list_id
     })
 end

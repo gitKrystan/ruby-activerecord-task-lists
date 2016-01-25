@@ -5,8 +5,14 @@
     <div class="col-xs-3 well">
       <h4><%= list.name() %></h4>
 
-      <!-- List each task with checkbox to mark complete -->
-      <% list.tasks.where(done: false).each() do |task| %>
+      <!-- List each task with form to move or mark complete -->
+      <% if @done_task_visibility == "show" %>
+        <% list_tasks = list.tasks() %>
+      <% else %>
+        <% list_tasks = list.tasks.where(done: false) %>
+      <% end %>
+
+      <% list_tasks.each() do |task| %>
         <div class="panel">
           <div class="panel-body">
             <form action="/tasks" method="post">
@@ -15,7 +21,11 @@
 
               <div class="form-inline">
                 <label for="done"><%= task.description() %></label>
-                <button id="finish-<%= task.id() %>" type="submit" class="btn btn-danger btn-xs pull-right" name="done" value="clicked">Done</button>
+                <% if task.done() %>
+                  <button id="finish-<%= task.id() %>" type="submit" class="btn btn-danger btn-xs pull-right" name="done" value="not_done">Mark as Not Done</button>
+                <% else %>
+                  <button id="finish-<%= task.id() %>" type="submit" class="btn btn-danger btn-xs pull-right" name="done" value="done">Mark as Done</button>
+                <% end %>
               </div>
 
               <div class="input-group">
@@ -59,3 +69,11 @@
     </form>
   </div>
 </div>
+
+<form action="/">
+  <% if @done_task_visibility == "show" %>
+    <button type="submit" class="btn btn-default" name="done_task" value="hide">Hide completed tasks</button>
+  <% else %>
+    <button type="submit" class="btn btn-default" name="done_task" value="show">Show completed tasks</button>
+  <% end %>
+</form>
