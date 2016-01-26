@@ -48,3 +48,9 @@ patch('/tasks') do
 
   redirect('/')
 end
+
+delete('/tasks') do
+  task = Task.find(params[:task_id])
+  task.destroy()
+  redirect('/')
+end

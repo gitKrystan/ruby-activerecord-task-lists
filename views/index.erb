@@ -34,40 +34,49 @@
           <div class="panel">
             <div class="panel-body">
               <p class="pull-left"><%= task.description() %></p>
-              <form action="/tasks" method="post">
-                <input hidden name="task_id" value="<%= task.id() %>">
-                <input hidden name="_method" value="patch">
-
                 <!-- Button dropdown -->
                 <div class="btn-group pull-right">
-                  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button id="edit-<%= task.id() %>" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
                   </button>
 
                   <ul class="dropdown-menu">
                     <li>
-                      <% if task.done() %>
-                        <button id="finish-<%= task.id() %>" type="submit" class="btn btn-link" name="done" value="not_done">Mark as Not Done</button>
-                      <% else %>
-                        <button id="finish-<%= task.id() %>" type="submit" class="btn btn-link" name="done" value="done">Mark as Done</button>
-                      <% end %>
+                      <form action="/tasks" method="post">
+                        <input hidden name="task_id" value="<%= task.id() %>">
+                        <input hidden name="_method" value="patch">
+                        <% if task.done() %>
+                          <button id="finish-<%= task.id() %>" type="submit" class="btn btn-link" name="done" value="not_done">Mark as Not Done</button>
+                        <% else %>
+                          <button id="finish-<%= task.id() %>" type="submit" class="btn btn-link" name="done" value="done">Mark as Done</button>
+                        <% end %>
+                      </form>
+                    </li>
+                    <li>
+                      <form action="/tasks" method="post">
+                        <input hidden name="task_id" value="<%= task.id() %>">
+                        <button id="delete-<%= task.id() %>" type="submit" class="btn btn-link" name="_method" value="delete">Delete</button>
+                      </form>
                     </li>
 
                     <% if @lists.length() > 1 %>
                     <li role="separator" class="divider"></li>
-                      <% @lists.each() do |list| %>
-                        <% unless list == current_list %>
-                        <li>
-                          <button class="btn btn-link" name="list_id" value="<%= list.id() %>">
-                            Move to <%= list.name() %>
-                          </button>
-                        </li>
+                      <form action="/tasks" method="post">
+                        <input hidden name="task_id" value="<%= task.id() %>">
+                        <input hidden name="_method" value="patch">
+                        <% @lists.each() do |list| %>
+                          <% unless list == current_list %>
+                          <li>
+                            <button class="btn btn-link" name="list_id" value="<%= list.id() %>">
+                              Move to <%= list.name() %>
+                            </button>
+                          </li>
+                          <% end %>
                         <% end %>
-                      <% end %>
+                      </form>
                     <% end %>
                   </ul>
                 </div>
-              </form>
             </div>
           </div>
         <% end %>

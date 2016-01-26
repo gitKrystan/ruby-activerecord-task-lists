@@ -57,9 +57,20 @@ describe('moving a task', {:type => :feature}) do
     second_list = create_second_list()
     test_task = create_test_task(test_list.id())
     visit('/')
-    click_link("addATask-#{test_list.id()}")
+    click_on("edit-#{test_list.id()}")
     click_button("Move to #{second_list.name()}")
     expect(second_list.tasks()).to(eq([test_task]))
+  end
+end
+
+describe('deleting a task', {:type => :feature}) do
+  it('allows the user to delete a task') do
+    test_list = create_test_list()
+    test_task = create_test_task(test_list.id())
+    visit('/')
+    click_on("edit-#{test_task.id()}")
+    click_button("delete-#{test_task.id()}")
+    expect(page).not_to(have_content('test task'))
   end
 end
 
