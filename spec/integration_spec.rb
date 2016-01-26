@@ -19,12 +19,22 @@ end
 describe('adding a list', {:type => :feature}) do
   it('allows the user to add multiple lists to a board') do
     visit('/')
-    fill_in('name', :with => 'Test List')
+    fill_in('name', :with => 'First List')
     click_button('save-new-list')
-    expect(page).to(have_content('Test List'))
-    fill_in('name', :with => 'Test List 2')
+    expect(page).to(have_content('First List'))
+    fill_in('name', :with => 'Second List')
     click_button('save-new-list')
-    expect(page).to(have_content('Test List 2'))
+    expect(page).to(have_content('Second List'))
+  end
+end
+
+describe('deleting a list', {:type => :feature}) do
+  it('allows the user to delete a list') do
+    test_list = create_test_list()
+    visit('/')
+    click_on("edit-#{test_list.id()}")
+    click_button("delete-#{test_list.id()}")
+    expect(page).not_to(have_content('First List'))
   end
 end
 

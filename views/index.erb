@@ -5,6 +5,24 @@
       <div class="col-xs-3 well">
         <h4><%= current_list.name() %></h4>
 
+        <!-- Dropdown options for this list -->
+        <form action="/lists" method="post">
+          <input hidden name="list_id" value="<%= current_list.id() %>">
+          <input hidden name="_method" value="patch">
+
+          <div class="btn-group">
+            <button id="edit-<%= current_list.id() %>" type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="caret"></span>
+            </button>
+
+            <ul class="dropdown-menu">
+                <li>
+                  <button id="delete-<%= current_list.id() %>" type="submit" class="btn btn-link" name="_method" value="delete">Delete list</button>
+                </li>
+            </ul>
+          </div>
+        </form>
+
         <!-- List each task with form to move or mark complete -->
         <% if @done_task_visibility == "show" %>
           <% list_tasks = current_list.tasks() %>
@@ -35,9 +53,8 @@
                       <% end %>
                     </li>
 
-                    <li role="separator" class="divider"></li>
-
                     <% if @lists.length() > 1 %>
+                    <li role="separator" class="divider"></li>
                       <% @lists.each() do |list| %>
                         <% unless list == current_list %>
                         <li>

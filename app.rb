@@ -20,6 +20,12 @@ post('/lists') do
   redirect('/')
 end
 
+delete('/lists') do
+  list = List.find(params[:list_id])
+  list.destroy()
+  redirect('/')
+end
+
 post('/tasks') do
   list = List.find(params[:list_id])
   list.tasks.create({
